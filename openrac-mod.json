@@ -1,0 +1,39 @@
+{
+  "format": 2,
+  "id": "rac2-hd-achievements",
+  "name": "RAC2 HD Achievements",
+  "author": "Joebannerlord",
+  "version": "0.1.3",
+  "description": "Track Going Commando HD trophies locally and open your collection in the OpenRAC launcher.",
+  "games": {
+    "rac2": [
+      "ntsc"
+    ]
+  },
+  "api": "1.14",
+  "plugin": {
+    "windows-x86_64": "lib/windows-x86_64/rac2_hd_achievements.dll"
+  },
+  "license": "GPL-3.0-or-later",
+  "assets": "ui",
+  "settings": [
+    {
+      "key": "preview_toast",
+      "type": "keybind",
+      "name": "Preview trophy popup",
+      "description": "Show a sample trophy popup during gameplay without changing progress.",
+      "default": "Insert",
+      "binds": 1
+    },
+    {
+      "key": "toast_sound",
+      "type": "bool",
+      "name": "Trophy popup sound",
+      "description": "Play a short chime when a trophy popup appears.",
+      "default": true
+    }
+  ],
+  "tool": {
+    "page": "ui/index.html"
+  }
+}

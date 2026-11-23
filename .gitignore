@@ -1,0 +1,13 @@
+/.sdk/
+/build/
+/dist/
+/out/
+/CMakeUserPresets.json
+__pycache__/
+*.pyc
+*.bin
+*.bin.mods
+*.dll
+*.exe
+*.pdb
+*.zip
