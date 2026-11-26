@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
-project(rac2_hd_achievements VERSION 0.1.3 LANGUAGES CXX)
+project(rac2_hd_achievements VERSION 0.1.4 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 add_subdirectory(src/core)
@@ -63,13 +64,11 @@ if(BUILD_OPENRAC_PLUGIN)
     add_executable(core_test tests/core_test.cpp)
     target_link_libraries(core_test PRIVATE achievements_core)
     add_test(NAME trophy_rules COMMAND core_test)
-    if(WIN32)
-      add_executable(plugin_test tests/plugin_test.cpp)
-      target_link_libraries(plugin_test PRIVATE achievements_core)
-      target_include_directories(plugin_test PRIVATE "${OPENRAC_SDK}/include")
-      add_test(NAME stable_plugin COMMAND plugin_test
-        "$<TARGET_FILE:rac2_hd_achievements>"
-        "${package_dir}/ui/audiowide-latin-400-normal.woff2")
-    endif()
+    add_executable(plugin_test tests/plugin_test.cpp)
+    target_link_libraries(plugin_test PRIVATE achievements_core ${CMAKE_DL_LIBS})
+    target_include_directories(plugin_test PRIVATE "${OPENRAC_SDK}/include")
+    add_test(NAME stable_plugin COMMAND plugin_test
+      "$<TARGET_FILE:rac2_hd_achievements>"
+      "${package_dir}/ui/audiowide-latin-400-normal.woff2")
   endif()
 endif()

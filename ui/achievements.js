@@ -15,7 +15,7 @@ function launcherOrigin() {
   const ancestor = location.ancestorOrigins?.[0];
   if (origins.includes(ancestor)) return ancestor;
   // The launcher's iframe deliberately omits the referrer. Match the scheme
-  // used by its custom protocol on Windows, where this package runs.
+  // used by its custom protocol.
   if (location.hostname === "openrac-mod.localhost") return `${location.protocol}//tauri.localhost`;
   return "";
 }

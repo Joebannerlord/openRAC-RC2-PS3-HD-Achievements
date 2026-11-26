@@ -2,7 +2,7 @@
 
 Track all 35 Going Commando HD trophies in OpenRAC. Load an existing save to credit completed trophies the game can prove. New unlocks show a tier-colored popup with an optional chime. Progress stays local.
 
-Supports **OpenRAC 1.1.0 on Windows x86-64** with **Ratchet & Clank: Going Commando USA v1.01** (`SCUS-97268`). The plugin uses OpenRAC mod API 1.14.
+Supports **OpenRAC 1.1.0 on Windows and Linux x86-64** with **Ratchet & Clank: Going Commando USA v1.01** (`SCUS-97268`). The plugin uses OpenRAC mod API 1.14.
 
 ## Install
 
@@ -15,7 +15,7 @@ Supports **OpenRAC 1.1.0 on Windows x86-64** with **Ratchet & Clank: Going Comma
 
 3. Choose **Install**, enable the mod, and start the game.
 
-You can also download the Windows ZIP and import it through **Mods → Add a mod**. [Releases](https://github.com/Joebannerlord/openRAC-RC2-PS3-HD-Achievements/releases) · [OpenRAC installation guide](https://openrac.dev/mods/docs/install-from-link)
+You can also download the ZIP for your platform and import it through **Mods → Add a mod**. [Releases](https://github.com/Joebannerlord/openRAC-RC2-PS3-HD-Achievements/releases) · [OpenRAC installation guide](https://openrac.dev/mods/docs/install-from-link)
 
 ## Trophy collection
 
@@ -25,9 +25,9 @@ Press **Insert** during play to preview **More Vandalism?** without advancing tr
 
 Bolt trophies count cumulative earnings per campaign, including Challenge Mode. The mod credits historical earnings that the saved wallet, counted pickups, and certain stock purchases can prove. Spending that left no record cannot be recovered. A direct payout can be missed if spending masks it in the same tick.
 
-## Build on Windows
+## Build
 
-Use an x64 Visual Studio developer prompt with MSVC, CMake 3.20 or newer, and Python 3. The fetcher verifies the OpenRAC Mod SDK pinned in [sdk.lock](sdk.lock).
+On Windows, use an x64 Visual Studio developer prompt with MSVC. On Linux x86-64, use GCC or Clang. Both need CMake 3.20 or newer and Python 3. The fetcher verifies the OpenRAC Mod SDK pinned in [sdk.lock](sdk.lock).
 
 ```powershell
 python tools/fetch_sdk.py
@@ -37,7 +37,9 @@ ctest --test-dir build -C Release --output-on-failure
 cmake --build build --config Release --target release_zip
 ```
 
-The Windows ZIP is written to `build/dist/`. The included tests use simulated inputs and the public SDK.
+The platform ZIP is written to `build/dist/`. The included tests use simulated inputs and the public SDK.
+
+On Linux, popup text uses the game overlay font and the built-in tier medals.
 
 ## Credits and license
 

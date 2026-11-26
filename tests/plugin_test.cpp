@@ -1,7 +1,13 @@
 #include "save_fixture.hpp"
 #include <openrac/keys.h>
 #include <openrac/openrac_mod.h>
+#ifdef _WIN32
 #include <windows.h>
+#else
+#include <dlfcn.h>
+#include <unistd.h>
+#endif
+#include <chrono>
 
 #include <filesystem>
 #include <fstream>
@@ -119,12 +125,20 @@ openrac_api api() {
 } // namespace
 
 int main(int argc, char** argv) try {
-    check(argc == 3, "pass the packaged DLL and Audiowide font");
+    check(argc == 3, "pass the packaged library and Audiowide font");
+#ifdef _WIN32
     const auto dll = LoadLibraryW(fs::absolute(argv[1]).c_str());
     check(dll != nullptr, "load packaged x64 DLL");
     const auto query = reinterpret_cast<openrac_mod_query_fn>(GetProcAddress(dll, OPENRAC_MOD_QUERY));
     const auto load = reinterpret_cast<openrac_mod_load_fn>(GetProcAddress(dll, OPENRAC_MOD_LOAD));
     const auto unload = reinterpret_cast<openrac_mod_unload_fn>(GetProcAddress(dll, OPENRAC_MOD_UNLOAD));
+#else
+    const auto dll = dlopen(fs::absolute(argv[1]).c_str(), RTLD_NOW | RTLD_LOCAL);
+    check(dll != nullptr, "load packaged library");
+    const auto query = reinterpret_cast<openrac_mod_query_fn>(dlsym(dll, OPENRAC_MOD_QUERY));
+    const auto load = reinterpret_cast<openrac_mod_load_fn>(dlsym(dll, OPENRAC_MOD_LOAD));
+    const auto unload = reinterpret_cast<openrac_mod_unload_fn>(dlsym(dll, OPENRAC_MOD_UNLOAD));
+#endif
     check(query && load && unload, "plugin exports");
     openrac_mod_info info{};
     info.size = sizeof info;
@@ -132,8 +146,13 @@ int main(int argc, char** argv) try {
     check(info.api_major == 1 && info.api_minor == 14
           && std::string_view(info.id) == "rac2-hd-achievements", "packaged ABI or ID");
 
-    const auto root = fs::absolute("test-state-" + std::to_string(GetCurrentProcessId())
-        + '-' + std::to_string(GetTickCount64()));
+#ifdef _WIN32
+    const auto pid = GetCurrentProcessId();
+#else
+    const auto pid = getpid();
+#endif
+    const auto root = fs::absolute("test-state-" + std::to_string(pid)
+        + '-' + std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
     const auto dir = root / "mod-data" / info.id;
     const auto profile = dir / "profile.txt";
     const auto summary = root / "mod-tools" / info.id / "trophies.json";
@@ -292,7 +311,11 @@ int main(int argc, char** argv) try {
     frame(OPENRAC_PLAY_SCENE, 20, 1, 8);
     check(read(boss_dir / "profile.txt") == defeated, "boss request was credited twice");
     unload();
+#ifdef _WIN32
     FreeLibrary(dll);
+#else
+    dlclose(dll);
+#endif
     std::cout << "Stable API fixture passed clean and existing starts, preview, chime, save, reload, slot switch, and Challenge Mode.\n";
     return 0;
 } catch (const std::exception& error) {

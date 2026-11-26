@@ -3,7 +3,7 @@
   "id": "rac2-hd-achievements",
   "name": "RAC2 HD Achievements",
   "author": "Joebannerlord",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Track Going Commando HD trophies locally and open your collection in the OpenRAC launcher.",
   "games": {
     "rac2": [
@@ -12,7 +12,8 @@
   },
   "api": "1.14",
   "plugin": {
-    "windows-x86_64": "lib/windows-x86_64/rac2_hd_achievements.dll"
+    "windows-x86_64": "lib/windows-x86_64/rac2_hd_achievements.dll",
+    "linux-x86_64": "lib/linux-x86_64/rac2_hd_achievements.so"
   },
   "license": "GPL-3.0-or-later",
   "assets": "ui",

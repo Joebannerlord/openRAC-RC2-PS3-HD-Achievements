@@ -380,7 +380,7 @@ void load(openrac::Mod& mod) {
 }
 } // namespace
 
-OPENRAC_MOD_CPP("rac2-hd-achievements", "0.1.3", load)
+OPENRAC_MOD_CPP("rac2-hd-achievements", "0.1.4", load)
 
 extern "C" OPENRAC_MOD_EXPORT void openrac_mod_unload() {
     if (adapter) adapter->flush();
